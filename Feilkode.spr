@@ -1,0 +1,125 @@
+Standard measurement with protocol
+[E002] Missing pulse
+[E002] Pulse-basis-width bigger than defined in ('MAX_BEAT_WIDTH') 
+[E002] Pulse-basis-width shorter than defined in ('MAX_BEAT_WIDTH') 
+[E001] After 2 sec. the pulse has not yet reached the requested falling level required for the oscillometric measurement
+5
+6
+[E001] At no pressure level the heart frequency was in the requested area for oscillometric measurement or the pulse curve was turned upside down
+[E001] Pulse curve could not be calculated
+10
+11
+12
+13
+[E004] Time overflow with the communication
+[E004] Data block without end identifier
+[E004] Data block without start identifier
+[E004] Unknown command
+[E005] Battery voltage to low
+19
+[E003] At more than 3 pressure levels, the heart frequency was out of the defined area
+[E002] During deflation process the pressure increased significantly (movement artefact)
+[E003] The MAP is either smaller than dia min or greater than sys max
+[E003] Difference between sys and dia is too small
+[E003] Within the entire measurement process, there occurred an oscillation that is smaller (<80%) as the Start- or End value of the measurement, which are considered to have the smallest oscillation
+[E003] Within the entire measurement process, there occurred a measured pulse time that is shorter (<70%) as the Start- or End pulse time of the measurement process, which are considered to have the shortest durative pulse time
+[E003] Verification of MAP failed, the calculated value has not met the requested standard of MAP range
+27
+[E006] Pressure cannot be built-up in sufficient time (no cuff or male nut broken)
+29
+[E003] Diastolic not in the defined area
+[E003] Systolic not in the defined area
+[E003] More steps as selected in MAX_DECREASE_STEPS
+[E003] Oscillation to high (limit value)
+34
+35
+36
+[E009] Error during the automatic zero adjustment procedure or pressure bigger than 15 mmHg remains for more than 10 sec within the system
+[E003] Measurement time longer as MAX_MEAS_TIME
+0
+[E004] Checksum error
+[E010] Forbidden pumping
+[E007] No memory space in EEPROM
+[E010] Internal oscillator error
+[E003] Max. quantity of pulse beats at a pressure step exceeded
+[E010] External oscillator error
+[E003] Pressure to high
+[E006] Pressure built up too fast (blockage or bend in connection tube)
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+[E010] Analogue voltage could not be initiated
+[E010] Pressure to high
+[E010] Error at function registration
+[E010] Analogue voltage activated too long
+[E010] Error in program code CRC
+[E010] Watchdog-Overflow
+[E008] User abort
+[E010] Pressure detection circuit failed
+[E006] Pressure decreases during inflation process – Error of digital converter
+[E010] Initialization of the display driver failed
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+First measurement via press start key
+Measurement via event key
+Start measurement with trigger-mode
+Device switch ON
+Device switch OFF
+Measurement after a error-measurement
+Measurement with ergo meter protocol
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+Day/Night would be activate and get a switch
+Day/Night would be activate and get no switch
