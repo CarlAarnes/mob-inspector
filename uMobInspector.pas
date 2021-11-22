@@ -1,16 +1,16 @@
 (*******************************************************************************
-                              Diagnostica AS
+                              Company AS
                               Copyright 2013 - 2014
 
-Description: A clone of the Mob-inspector from IEM.
+Description: A clone of the Mob-inspector from Some Company.
 
                               Mob-Inspector clone v1
                               Developer: Carl Aarnes
 
 Using information from documents:
 
-Z:\Hardware\Spirare ABPM\Comunication protocol\swbe004B(Old G).doc
-Z:\Hardware\Spirare ABPM\Comunication protocol\MobII_Communication_User_1 1(NG).pdf
+\\SomeServer\swbe004B(Old G).doc
+\\SomeServer\MobII_Communication_User_1 1(NG).pdf
 
 *******************************************************************************)
 
@@ -81,7 +81,7 @@ type
   end;
 
 type
-  Tmåling = record
+  TmÃ¥ling = record
     Sys       :Byte;
     Dia       :Byte;
     Puls      :Byte;
@@ -453,7 +453,7 @@ begin
     diastolicNight := ReadBuffer[5];
     systolicNight := ReadBuffer[6] + 45;
   end;
-  //litt typecasting fra helvete, men funker....
+  //litt typecasting, men funker....
   Synmemo1.Lines.Add('Dag: ' + intToStr(integer(systolicDay)) + '/' + intToStr(integer(diastolicDay)));
   Synmemo1.Lines.Add('Natt: ' + IntToStr(integer(systolicNight)) + '/' + intToStr(integer(diastolicNight)));
 end;
@@ -514,7 +514,7 @@ begin
     begin
       PatKey := PatKey + chr(ReadBuffer[I]);
     end;
-  Synmemo1.Lines.Add('Pasient nøkkel: ' + PatKey);
+  Synmemo1.Lines.Add('Pasient nÃ¸kkel: ' + PatKey);
 end;
 
 
@@ -577,7 +577,7 @@ begin
   //ABPMCommand(225);
   ABPMCommand(EraseAllMeasurements);
     if ReadBuffer[2] = byte(Erased) then
-  SynMemo1.Lines.Add('Målinger slettet!');
+  SynMemo1.Lines.Add('MÃ¥linger slettet!');
 end;
 
 
@@ -597,7 +597,7 @@ begin
   ABPMCommand(ReadNumberOfMeasurements,ReadBuffer);
   if (ReadBuffer[2] = byte(NumberOfMeasurements)) then
     noMeas := ReadBuffer[3]*256 + ReadBuffer[4];
-  Synmemo1.Lines.Add('Antall målinger: ' + IntToStr(noMeas));
+  Synmemo1.Lines.Add('Antall mÃ¥linger: ' + IntToStr(noMeas));
 end;
 
 
@@ -715,8 +715,8 @@ begin
 end;
 
 procedure TForm1.btnReadUserDataClick(Sender: TObject);
-{Brukerminnet er delt opp i 10 blokker på 20 bytes. (blokk 0-9)
-Spirare bruker blokk 0 for å lagre informasjon om CuffSize.}
+{Brukerminnet er delt opp i 10 blokker pÃ¥ 20 bytes. (blokk 0-9)
+Program bruker blokk 0 for Ã¥ lagre informasjon om CuffSize.}
 var
   blokk       :integer;
   ReadBuffer  :ByteArray;
@@ -772,8 +772,8 @@ begin
   blokk := 0;
   WriteBuffer[0] := blokk;
 
-  //Ser ut til at CRC ikke er påkrevd her....
-  //CRC er summen av 70 etterfølgende bytes av CRC.
+  //Ser ut til at CRC ikke er pÃ¥krevd her....
+  //CRC er summen av 70 etterfÃ¸lgende bytes av CRC.
   //WriteBuffer[1] := HiByte(0);                                                  //Highbyte CRC;
   //WriteBuffer[2] := LoByte(0);                                                  // Lowbyte CRC
 
@@ -804,7 +804,7 @@ var
   EEPROMBuffer    :Array [0..8192] of byte;
   i               :integer;
   line            :string;
-  løpenr          :integer;
+  lÃ¸penr          :integer;
   fill            :string;
   checknr         :integer;
   ABPMDato        :TDateTime;
@@ -817,9 +817,9 @@ var
   memBattVHi      :Byte;
   MemErr          :Byte;
   memBatt         :Integer;
-  Last600         :Array of Tmåling;
+  Last600         :Array of TmÃ¥ling;
   Last100Errors   :Array of TLastErrors;
-  Minnemålepos    :Integer;
+  MinnemÃ¥lepos    :Integer;
   Last100Adr      :Integer;
   EndAdr          :Integer;
   j               :Integer;
@@ -829,12 +829,12 @@ var
   FraDato         :Tdate;
   TilDato         :Tdate;
   FunnDato        :Tdate;
-  FunnetMålinger  :Array of Tmåling;
+  FunnetMÃ¥linger  :Array of TmÃ¥ling;
   r               :integer;
   s               :integer;
   nFound          :smallint;
 
-  procedure PrintMålinger(var Målinger: array of Tmåling);
+  procedure PrintMÃ¥linger(var MÃ¥linger: array of TmÃ¥ling);
   var
     antall      :integer;
     i           :smallint;
@@ -842,7 +842,7 @@ var
     fyll        :string;
   begin
     MeasNumber := 1;
-    antall := Length(Målinger);
+    antall := Length(MÃ¥linger);
     ShadowStrList.Clear();
 
     {if Checkbox2.Checked = true then
@@ -853,11 +853,11 @@ var
       if MeasNumber < 10 then fyll := '00'
         else
       fyll := '0';
-      Synmemo1.Lines.Add(fyll + IntToStr(MeasNumber) + ':    ' + Checkandfill(Målinger[i].Sys) + '   ' + Checkandfill(Målinger[i].Dia) + '   ' + Checkandfill(Målinger[i].Mean) + '   ' + Checkandfill(Målinger[i].Puls)
-      + '          ' + DateTimeToStr(Målinger[i].Dato) + '     ' + Checkandfill(Målinger[i].Voltage) + '     ' + Checkandfill(Målinger[i].ErrorCode));
+      Synmemo1.Lines.Add(fyll + IntToStr(MeasNumber) + ':    ' + Checkandfill(MÃ¥linger[i].Sys) + '   ' + Checkandfill(MÃ¥linger[i].Dia) + '   ' + Checkandfill(MÃ¥linger[i].Mean) + '   ' + Checkandfill(MÃ¥linger[i].Puls)
+      + '          ' + DateTimeToStr(MÃ¥linger[i].Dato) + '     ' + Checkandfill(MÃ¥linger[i].Voltage) + '     ' + Checkandfill(MÃ¥linger[i].ErrorCode));
       SynMemo1.SetFocus();
       if (Checkbox2.Checked = true) then
-        ShadowStrList.Add(IntToStr(Målinger[i].Sys) + ';' + IntToStr(Målinger[i].Dia) + ';' + IntToStr(Målinger[i].Mean) + ';' + IntToStr(Målinger[i].Puls) + ';' + DateTimeToStr(Målinger[i].Dato) + ';' + IntToStr(Målinger[i].Voltage) + ';' + IntToStr(Målinger[i].ErrorCode));
+        ShadowStrList.Add(IntToStr(MÃ¥linger[i].Sys) + ';' + IntToStr(MÃ¥linger[i].Dia) + ';' + IntToStr(MÃ¥linger[i].Mean) + ';' + IntToStr(MÃ¥linger[i].Puls) + ';' + DateTimeToStr(MÃ¥linger[i].Dato) + ';' + IntToStr(MÃ¥linger[i].Voltage) + ';' + IntToStr(MÃ¥linger[i].ErrorCode));
       inc(MeasNumber);
     end;
 
@@ -869,7 +869,7 @@ var
 
 begin
   i := 1;
-  løpenr := 0;
+  lÃ¸penr := 0;
 
   FillChar(EEPROMBuffer,sizeOf(EEPROMBuffer),0);
   Comport1.Open();
@@ -891,28 +891,28 @@ begin
 
       while i < sizeOf(EEpromBuffer) do
       begin
-        if løpenr < 10 then fill := '000';
-        if løpenr > 10 then fill := '00';
-        if (løpenr < 1000) and (løpenr > 100) then fill := '0';
-        if løpenr > 1000 then fill := '';
+        if lÃ¸penr < 10 then fill := '000';
+        if lÃ¸penr > 10 then fill := '00';
+        if (lÃ¸penr < 1000) and (lÃ¸penr > 100) then fill := '0';
+        if lÃ¸penr > 1000 then fill := '';
 
         if i >= 8192 then                                                           // ram max 8 kb ?
           break;
-        line := fill + IntToStr(løpenr) + ':  ' + checkandfill(EEPROMBuffer[i]) + ' , ' + CheckAndFill(EEPROMBuffer[i+1]) + ' , ' + CheckAndFill(EEPROMBuffer[i+2]) + ' , ' +
+        line := fill + IntToStr(lÃ¸penr) + ':  ' + checkandfill(EEPROMBuffer[i]) + ' , ' + CheckAndFill(EEPROMBuffer[i+1]) + ' , ' + CheckAndFill(EEPROMBuffer[i+2]) + ' , ' +
         CheckAndFill(EEPROMBuffer[i+3]) + ' , ' + CheckAndFill(EEPROMBuffer[i+4]) + ' , ' + CheckAndFill(EEPROMBuffer[i+5]) + ' , ' +
         CheckAndFill(EEPROMBuffer[i+6]) + ' , ' + CheckAndFill(EEPROMBuffer[i+7]) + ' , ' + CheckAndFill(EEPROMBuffer[i+8]) + ' , ' +
         CheckAndFill(EEPROMBuffer[i+9]) + ' , ' + CheckAndFill(EEPROMBuffer[i+10]) + ' , ' +
         CheckAndFill(EEPROMBuffer[i+11]) + ' , ' + CheckAndFill(EEPROMBuffer[i+12]) + ' , ' + CheckAndFill(EEPROMBuffer[i+13]) + ' , ' +
         CheckAndFill(EEPROMBuffer[i+14]) + ' , ' + CheckAndFill(EEPROMBuffer[i+15]);
         inc(i,16);
-        inc(løpenr,16);
+        inc(lÃ¸penr,16);
         Synmemo1.Lines.Add(line);
       end;
     end;
 
     ABPMBaseAdr := 811;
 
-    Minnemålepos := 0;
+    MinnemÃ¥lepos := 0;
     SetLength(Last600,599);
     if Checkbox2.Checked = false then
     begin
@@ -920,43 +920,43 @@ begin
       Synmemo1.Lines.Add('Nr      Sys   Dia   Map   Hr                   Time            Volt    iErr');
     end;
 
-    While (EEpromBuffer[ABPMBaseAdr+4]<>170) and (EEpromBuffer[ABPMBaseAdr+5]<>170) and (EEpromBuffer[ABPMBaseAdr+6]<>170) and (EEpromBuffer[ABPMBaseAdr+7]<>170) and (minnemålepos<600)  do
+    While (EEpromBuffer[ABPMBaseAdr+4]<>170) and (EEpromBuffer[ABPMBaseAdr+5]<>170) and (EEpromBuffer[ABPMBaseAdr+6]<>170) and (EEpromBuffer[ABPMBaseAdr+7]<>170) and (minnemÃ¥lepos<600)  do
     begin
-      if Last600[MinneMålepos].Sys <> 0 then
-        Last600[MinneMålepos].Sys := EepromBuffer[ABPMBaseAdr]+45
+      if Last600[MinneMÃ¥lepos].Sys <> 0 then
+        Last600[MinneMÃ¥lepos].Sys := EepromBuffer[ABPMBaseAdr]+45
       else
-        Last600[MinneMålepos].Sys := EepromBuffer[ABPMBaseAdr];
-      Last600[Minnemålepos].Dia :=  EepromBuffer[ABPMBaseAdr+1];
-      Last600[Minnemålepos].Puls := EepromBuffer[ABPMBaseAdr+2];
-      if Last600[Minnemålepos].Mean <> 0  then
-        Last600[Minnemålepos].Mean := EEpromBuffer[ABPMBaseAdr+3]+35
+        Last600[MinneMÃ¥lepos].Sys := EepromBuffer[ABPMBaseAdr];
+      Last600[MinnemÃ¥lepos].Dia :=  EepromBuffer[ABPMBaseAdr+1];
+      Last600[MinnemÃ¥lepos].Puls := EepromBuffer[ABPMBaseAdr+2];
+      if Last600[MinnemÃ¥lepos].Mean <> 0  then
+        Last600[MinnemÃ¥lepos].Mean := EEpromBuffer[ABPMBaseAdr+3]+35
       else
-        Last600[Minnemålepos].Mean := EEpromBuffer[ABPMBaseAdr+3];
-      Last600[Minnemålepos].Dato := SecondsToDateTime(EEpromBuffer[ABPMBaseAdr+4],EEpromBuffer[ABPMBaseAdr+5],EEpromBuffer[ABPMBaseAdr+6],EEpromBuffer[ABPMBaseAdr+7]);
-      Last600[Minnemålepos].ErrorCode := EEpromBuffer[ABPMBaseAdr+8];
-      Last600[Minnemålepos].Voltage := EepromBuffer[ABPMBaseAdr+9]*2;
-      inc(MinneMålepos);
+        Last600[MinnemÃ¥lepos].Mean := EEpromBuffer[ABPMBaseAdr+3];
+      Last600[MinnemÃ¥lepos].Dato := SecondsToDateTime(EEpromBuffer[ABPMBaseAdr+4],EEpromBuffer[ABPMBaseAdr+5],EEpromBuffer[ABPMBaseAdr+6],EEpromBuffer[ABPMBaseAdr+7]);
+      Last600[MinnemÃ¥lepos].ErrorCode := EEpromBuffer[ABPMBaseAdr+8];
+      Last600[MinnemÃ¥lepos].Voltage := EepromBuffer[ABPMBaseAdr+9]*2;
+      inc(MinneMÃ¥lepos);
       inc(ABPMBaseAdr,11);
     end;
-    Setlength(Last600,MinneMålepos);
+    Setlength(Last600,MinneMÃ¥lepos);
 
     if Checkbox2.Checked = false then
-      PrintMålinger(Last600);
+      PrintMÃ¥linger(Last600);
 
-    // Datosøk .....
+    // DatosÃ¸k .....
     if (Checkbox2.Checked = true) then
     begin
       FraDato := DateTimePicker2.Date;
       TilDato := DateTimePicker3.Date;
 
-      SetLength(FunnetMålinger,600);                                            //Max. dyn. array size!
+      SetLength(FunnetMÃ¥linger,600);                                            //Max. dyn. array size!
 
       nFound := 0;
      { for r := 0 to Length(Last600)-1 do
       begin
         case CompareDate(FraDato,Last600[r].Dato) of                            //Er lik FraDato
           0:  begin
-                FunnetMålinger[nFound] := Last600[r];
+                FunnetMÃ¥linger[nFound] := Last600[r];
                 inc(nFound);
               end;
           1:  ;
@@ -969,13 +969,13 @@ begin
       begin
         case CompareDate(TilDato,Last600[s].Dato) of
         0:  begin
-              FunnetMålinger[nFound] := Last600[s];
+              FunnetMÃ¥linger[nFound] := Last600[s];
               inc(nFound);
             end;
         1:  begin
               if ((CompareDate(FraDato,Last600[s].Dato) = 0) or (CompareDate(FraDato,Last600[s].Dato) = -1)) then
               begin
-                FunnetMålinger[nFound] := Last600[s];
+                FunnetMÃ¥linger[nFound] := Last600[s];
                 inc(nFound);
               end;
             end;
@@ -983,13 +983,13 @@ begin
         end;
       end;
 
-      setLength(FunnetMålinger,nFound);                                         //resize array
+      setLength(FunnetMÃ¥linger,nFound);                                         //resize array
       SynMemo1.Lines.Add(#13);
-      SynMemo1.Lines.Add('Målinger funnet:');
+      SynMemo1.Lines.Add('MÃ¥linger funnet:');
       Synmemo1.Lines.Add('Nr      Sys   Dia   Map   Hr                   Time            Volt    iErr');
-      PrintMålinger(FunnetMålinger);
+      PrintMÃ¥linger(FunnetMÃ¥linger);
     end;
-    {TestDate := Last600[0].dato;//Målinger[n].Dato;
+    {TestDate := Last600[0].dato;//MÃ¥linger[n].Dato;
     for r := 0 to Length(Last600)-1 do
     begin
       case CompareDateTime(TestDate,Last600[r].Dato) of
@@ -1267,7 +1267,7 @@ begin
     end
     else if ReadBuffer[2] = byte(NotAvailable) then
     begin
-      Synmemo1.Lines.Add('Ingen måling funnet');
+      Synmemo1.Lines.Add('Ingen mÃ¥ling funnet');
     end;
   finally
     Measurement.Free;
@@ -1342,7 +1342,7 @@ procedure TForm1.btnDelHeaderClick(Sender: TObject);
 var
   btnValue  :integer;
 begin
-  btnValue := MessageDlg('Er du sikker på at du vil slette Header?', mtConfirmation, [mbYes, mbNo], 0);
+  btnValue := MessageDlg('Er du sikker pÃ¥ at du vil slette Header?', mtConfirmation, [mbYes, mbNo], 0);
   if btnValue = mrYes then
     ABPMCommand(DeleteHeader);
 end;
@@ -1426,7 +1426,7 @@ begin
     Synmemo1.Lines.Add('Minnespenningen er: ' + intToStr(memVolt) + ' mV');
   end
   else
-    SynMemo1.Lines.Add('Kunne ikke lese spenningen på minnebatteri.');
+    SynMemo1.Lines.Add('Kunne ikke lese spenningen pÃ¥ minnebatteri.');
 end;
 
 function TForm1.Sync():boolean;
@@ -1442,7 +1442,7 @@ begin
   begin
     WriteBuffer := 5;                                 //Sync
     BytesRec := Comport1.Write(WriteBuffer,1);        //Sync er bare 1 byte
-    sleep(20);                                         // Må sove litt .... :(  ...hmmm 
+    sleep(20);                                         // MÃ¥ sove litt .... :(  ...hmmm 
     BytesSent := Comport1.Read(reply,1);
   end;                                                //Check for ACK!!!
     result := (reply = 6);
@@ -1537,7 +1537,7 @@ begin
 
     Except
       On E:EComPort do
-        ShowMessage('Sjekk at apparat står i og riktig comport er valgt');
+        ShowMessage('Sjekk at apparat stÃ¥r i og riktig comport er valgt');
      end;
 
   finally
@@ -1600,7 +1600,7 @@ begin
 
     Except
       On E:EComPort do
-        ShowMessage('Sjekk at apparat står i og riktig comport er valgt');
+        ShowMessage('Sjekk at apparat stÃ¥r i og riktig comport er valgt');
      end;
 
   finally
